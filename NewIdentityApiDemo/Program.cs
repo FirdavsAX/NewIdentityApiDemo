@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using NewIdentityApiDemo.Data;
+using NewIdentityApiDemo.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ builder.Services.AddSwaggerGen();
 //Add Authorization here
 builder.Services.AddAuthorization();
 builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<AppDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGroup("/identity").MapIdentityApi<AppUser>();
 
 app.UseHttpsRedirection();
 
